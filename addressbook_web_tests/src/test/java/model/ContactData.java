@@ -1,12 +1,6 @@
 package model;
 
-
-
-
 public record ContactData(String lastName, String firstName, String address, String email, String phone) {
-
-
-
 
     public ContactData() {
         this("", "", "", "", "");

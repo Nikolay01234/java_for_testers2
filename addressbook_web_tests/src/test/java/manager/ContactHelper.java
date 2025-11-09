@@ -30,15 +30,15 @@ public class ContactHelper {
         openContactsPage();
         manager.driver.findElement(By.linkText("add new")).click();
         manager.driver.findElement(By.name("firstname")).click();
-        manager.driver.findElement(By.name("firstname")).sendKeys("FirstName");
+        manager.driver.findElement(By.name("firstname")).sendKeys(contact.firstName());
         manager.driver.findElement(By.name("lastname")).click();
-        manager.driver.findElement(By.name("lastname")).sendKeys("LastName");
+        manager.driver.findElement(By.name("lastname")).sendKeys(contact.lastName());
         manager.driver.findElement(By.name("address")).click();
-        manager.driver.findElement(By.name("address")).sendKeys("PrivetDrive34");
+        manager.driver.findElement(By.name("address")).sendKeys(contact.address());
         manager.driver.findElement(By.name("mobile")).click();
-        manager.driver.findElement(By.name("mobile")).sendKeys("mobilePhone");
+        manager.driver.findElement(By.name("mobile")).sendKeys(contact.phone());
         manager.driver.findElement(By.name("email")).click();
-        manager.driver.findElement(By.name("email")).sendKeys("newEmail@mail.ru");
+        manager.driver.findElement(By.name("email")).sendKeys(contact.email());
         manager.driver.findElement(By.name("submit")).click();
         manager.driver.findElement(By.linkText("home")).click();
     }

@@ -18,6 +18,9 @@ public class ApplicationManager {
     // Ссылка на помощника GroupHelper
     private GroupHelper groups;
 
+    // Ссылка на помощника ContactHelper
+    private ContactHelper contacts;
+
     // Инициализация драйвера, закрытие браузера, переход на страницу addressbook, а также ввод логина и пароля
     public void init() {
         if (driver == null) {
@@ -47,6 +50,16 @@ public class ApplicationManager {
         }
         return groups;
     }
+
+
+    // Метод, который выполняет ленивую инициализацию помощника ContactHelper
+    public ContactHelper contacts() {
+        if (contacts == null) {
+            contacts = new ContactHelper(this);
+        }
+        return contacts;
+    }
+
 
     // Проверяет, есть ли элемент на странице, если элемента нет, то выкидывает исключение NoSuchElementException
     protected boolean isElementPresent(By locator) {

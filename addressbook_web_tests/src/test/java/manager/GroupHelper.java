@@ -15,6 +15,8 @@ public class GroupHelper {
 
     // Открывает страницу группы
     public void openGroupsPage() {
+        // Если нет элемента с именем "new", т.е. ни одна группа не создана, то кликаем по кнопке "groups",
+        // чтобы перейти к созданию групп
         if (! manager.isElementPresent(By.name("new"))) {
             manager.driver.findElement(By.linkText("groups")).click();
         }

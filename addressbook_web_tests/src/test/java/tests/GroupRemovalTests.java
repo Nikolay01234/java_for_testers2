@@ -22,6 +22,8 @@ public class GroupRemovalTests extends TestBase {
 //        app.removeGroup();
 //    }
 
+    // Метод удаляет группу
+    // Если нет группы, то группа будет создана, а потом удалена
     @Test
     public void CanRemoveGroup() {
         if (!app.groups().isGroupPresent()) {

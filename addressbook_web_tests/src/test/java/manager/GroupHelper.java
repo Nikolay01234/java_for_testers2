@@ -3,6 +3,7 @@ package manager;
 import model.GroupData;
 import org.openqa.selenium.By;
 
+// Класс помощник для работы с группами
 public class GroupHelper {
 
     // Ссылка на делегирующий класс manager
@@ -12,17 +13,20 @@ public class GroupHelper {
         this.manager = manager;
     }
 
+    // Открывает страницу группы
     public void openGroupsPage() {
         if (! manager.isElementPresent(By.name("new"))) {
             manager.driver.findElement(By.linkText("groups")).click();
         }
     }
 
+    // Проверяет наличие элемента
     public boolean isGroupPresent() {
         openGroupsPage();
         return manager.isElementPresent(By.name("selected[]"));
     }
 
+    // Создаёт группу
     public void createGroup(GroupData group) {
         openGroupsPage();
         manager.driver.findElement(By.name("new")).click();
@@ -36,6 +40,7 @@ public class GroupHelper {
         manager.driver.findElement(By.linkText("group page")).click();
     }
 
+    // Удаляет группу
     public void removeGroup() {
         openGroupsPage();
         manager.driver.findElement(By.name("selected[]")).click();

@@ -5,6 +5,9 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+// Класс, в котором будут находиться методы, предназначенные для управления
+// тестируемым приложением, для взаимодействия с ним.
 public class ApplicationManager {
 
     protected WebDriver driver;
@@ -39,6 +42,7 @@ public class ApplicationManager {
         return groups;
     }
 
+    // Проверяет, есть ли элемент на странице
     protected boolean isElementPresent(By locator) {
         try {
             driver.findElement(locator);

@@ -2,6 +2,7 @@ package manager;
 
 import org.openqa.selenium.By;
 
+// Ввод кредов и вход в addressbook
 public class LoginHelper {
 
     // Ссылка на делегирующий класс manager

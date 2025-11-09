@@ -1,5 +1,8 @@
 package model;
 
+// класс (record) GroupData моделирует группу - Group
+// у группы есть три поля "group name", "group header", "group footer"
+// группа может быть создана только с именем, только с хедером, только с футером
 public record GroupData(String name, String header, String footer) {
 
     public GroupData() {

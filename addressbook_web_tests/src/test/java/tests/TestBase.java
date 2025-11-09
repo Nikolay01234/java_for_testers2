@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class TestBase {
 
+    // Переменная app это ссылка на ApplicationManager
     protected static ApplicationManager app;
 
     @BeforeEach

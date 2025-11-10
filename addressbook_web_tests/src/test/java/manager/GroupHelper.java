@@ -29,17 +29,22 @@ public class GroupHelper {
     }
 
     // Создаёт группу
-    public void createGroup(GroupData group) {
+    public void createGroup(GroupData group) throws InterruptedException {
         openGroupsPage();
         manager.driver.findElement(By.name("new")).click();
+        Thread.sleep(1000);
         manager.driver.findElement(By.name("group_name")).click();
+//        manager.driver.findElement(By.xpath("//input[@name='group_name']")).click();
         manager.driver.findElement(By.name("group_name")).sendKeys(group.name());
         manager.driver.findElement(By.name("group_header")).click();
         manager.driver.findElement(By.name("group_header")).sendKeys(group.header());
         manager.driver.findElement(By.name("group_footer")).click();
         manager.driver.findElement(By.name("group_footer")).sendKeys(group.footer());
+        Thread.sleep(1000);
         manager.driver.findElement(By.name("submit")).click();
+        Thread.sleep(1000);
         manager.driver.findElement(By.linkText("group page")).click();
+        //manager.driver.findElement(By.xpath("//a[contains(.,'groups')]")).click();
     }
 
     // Удаляет группу

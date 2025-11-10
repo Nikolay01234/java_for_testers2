@@ -18,6 +18,7 @@ public class TestBase {
         if (app == null) { // если инициализация ещё не выполнялась
             app = new ApplicationManager();
         }
-        app.init();
+        // Задано системное свойство browser с дефолтным значением firefox
+        app.init(System.getProperty("browser", "firefox"));
     }
 }

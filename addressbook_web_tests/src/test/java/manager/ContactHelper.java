@@ -26,7 +26,7 @@ public class ContactHelper {
     }
 
     // Создаёт контакт
-    public void createContact(ContactData contact) {
+    public void createContact(ContactData contact) throws InterruptedException {
         openContactsPage();
         manager.driver.findElement(By.linkText("add new")).click();
         manager.driver.findElement(By.name("firstname")).click();
@@ -40,6 +40,7 @@ public class ContactHelper {
         manager.driver.findElement(By.name("email")).click();
         manager.driver.findElement(By.name("email")).sendKeys(contact.email());
         manager.driver.findElement(By.name("submit")).click();
+        Thread.sleep(1000);
         manager.driver.findElement(By.linkText("home")).click();
     }
 

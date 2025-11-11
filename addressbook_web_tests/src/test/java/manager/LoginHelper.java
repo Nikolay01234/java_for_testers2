@@ -3,18 +3,16 @@ package manager;
 import org.openqa.selenium.By;
 
 // Ввод кредов и вход в addressbook
-public class LoginHelper {
-
-    // Ссылка на делегирующий класс manager
-    private final ApplicationManager manager;
+public class LoginHelper extends HelperBase{
 
     public LoginHelper(ApplicationManager manager) {
-        this.manager = manager;
+        // Параметр manager передаётся в конструктор базового класса
+        super(manager);
     }
 
     void login(String user, String password) {
-        manager.driver.findElement(By.name("user")).sendKeys(user);
-        manager.driver.findElement(By.name("pass")).sendKeys(password);
-        manager.driver.findElement(By.xpath("//input[@value=\'Login\']")).click();
+        type(By.name("user"), user);
+        type(By.name("pass"), password);
+        click(By.xpath("//input[@value=\'Login\']"));
     }
 }

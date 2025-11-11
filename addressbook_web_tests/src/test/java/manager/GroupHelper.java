@@ -4,13 +4,13 @@ import model.GroupData;
 import org.openqa.selenium.By;
 
 // Класс помощник для работы с группами
-public class GroupHelper {
-
-    // Ссылка на делегирующий класс manager
-    private final ApplicationManager manager;
+public class GroupHelper extends HelperBase{
 
     public GroupHelper(ApplicationManager manager) {
-        this.manager = manager;
+        // Вызывается конструктор базового класса
+        // Значение параметра manager передаётся в конструктор базового класса
+        // и там сохраняется
+        super(manager);
     }
 
     // Открывает страницу группы
@@ -97,12 +97,6 @@ public class GroupHelper {
         type(By.name("group_footer"), group.footer());
     }
 
-    // Метод заполняет поле ввода
-    private void type(By locator, String text) {
-        click(locator);
-        manager.driver.findElement(locator).sendKeys(text);
-    }
-
     // Жмём на кнопку Edit, чтобы модифицировать группу
     private void initGroupModification() {
         click(By.name("edit"));
@@ -111,9 +105,5 @@ public class GroupHelper {
     // Активация чек-бокса группы
     private void selectGroup() {
         click(By.name("selected[]"));
-    }
-
-    private void click(By locator) {
-        manager.driver.findElement(locator).click();
     }
 }

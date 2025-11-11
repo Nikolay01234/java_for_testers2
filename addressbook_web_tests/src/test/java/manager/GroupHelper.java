@@ -18,7 +18,7 @@ public class GroupHelper {
         // Если нет элемента с именем "new", т.е. ни одна группа не создана, то кликаем по кнопке "groups",
         // чтобы перейти к созданию групп
         if (! manager.isElementPresent(By.name("new"))) {
-            manager.driver.findElement(By.linkText("groups")).click();
+            click(By.linkText("groups"));
         }
     }
 
@@ -31,27 +31,89 @@ public class GroupHelper {
     // Создаёт группу
     public void createGroup(GroupData group) throws InterruptedException {
         openGroupsPage();
-        manager.driver.findElement(By.name("new")).click();
+        initGroupCreation();
         Thread.sleep(1000);
-        manager.driver.findElement(By.name("group_name")).click();
-//        manager.driver.findElement(By.xpath("//input[@name='group_name']")).click();
-        manager.driver.findElement(By.name("group_name")).sendKeys(group.name());
-        manager.driver.findElement(By.name("group_header")).click();
-        manager.driver.findElement(By.name("group_header")).sendKeys(group.header());
-        manager.driver.findElement(By.name("group_footer")).click();
-        manager.driver.findElement(By.name("group_footer")).sendKeys(group.footer());
+        fillGroupForm(group);
         Thread.sleep(1000);
-        manager.driver.findElement(By.name("submit")).click();
+        submitGroupCreation();
         Thread.sleep(1000);
-        manager.driver.findElement(By.linkText("group page")).click();
-        //manager.driver.findElement(By.xpath("//a[contains(.,'groups')]")).click();
+        returnToGroupsPage();
     }
 
     // Удаляет группу
     public void removeGroup() {
         openGroupsPage();
-        manager.driver.findElement(By.name("selected[]")).click();
-        manager.driver.findElement(By.name("delete")).click();
-        manager.driver.findElement(By.linkText("group page")).click();
+        selectGroup();
+        removeSelectedGroup();
+        returnToGroupsPage();
+    }
+
+    // Модифицирует группу
+    public void modifyGroup(GroupData modifiedGroup) {
+        // открыть страницу групп
+        openGroupsPage();
+        // выбрать группу
+        selectGroup();
+        // нажать на кнопку для модификации группы
+        initGroupModification();
+        // заполнить форму данными, которые содержатся
+        // в объекте переданном в качестве параметра
+        fillGroupForm(modifiedGroup);
+        // подтвердить изменения
+        submitGroupModification();
+        // вернуться на страницу со списком групп
+        returnToGroupsPage();
+    }
+
+    // В окне создания группы жмём на кнопку "Enter information"
+    private void submitGroupCreation() {
+        click(By.name("submit"));
+    }
+
+    // Жмём на кнопку "New group"
+    private void initGroupCreation() {
+        click(By.name("new"));
+    }
+
+    // Жмём на кнопку "Delete group(s)"
+    private void removeSelectedGroup() {
+        click(By.name("delete"));
+    }
+
+    // Возвращаемся на страницу группы
+    private void returnToGroupsPage() {
+        click(By.linkText("group page"));
+    }
+
+    // Подтверждаем модификацию группы - жмём на кнопку Update
+    private void submitGroupModification() {
+        click(By.name("update"));
+    }
+
+    // Заполнение полей формы группы
+    private void fillGroupForm(GroupData group) {
+        type(By.name("group_name"), group.name());
+        type(By.name("group_header"), group.header());
+        type(By.name("group_footer"), group.footer());
+    }
+
+    // Метод заполняет поле ввода
+    private void type(By locator, String text) {
+        click(locator);
+        manager.driver.findElement(locator).sendKeys(text);
+    }
+
+    // Жмём на кнопку Edit, чтобы модифицировать группу
+    private void initGroupModification() {
+        click(By.name("edit"));
+    }
+
+    // Активация чек-бокса группы
+    private void selectGroup() {
+        click(By.name("selected[]"));
+    }
+
+    private void click(By locator) {
+        manager.driver.findElement(locator).click();
     }
 }

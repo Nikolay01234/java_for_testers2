@@ -58,7 +58,6 @@ public class ApplicationManager {
         return groups;
     }
 
-
     // Метод, который выполняет ленивую инициализацию помощника ContactHelper
     public ContactHelper contacts() {
         if (contacts == null) {
@@ -66,7 +65,6 @@ public class ApplicationManager {
         }
         return contacts;
     }
-
 
     // Проверяет, есть ли элемент на странице, если элемента нет, то выкидывает исключение NoSuchElementException
     protected boolean isElementPresent(By locator) {
@@ -77,5 +75,4 @@ public class ApplicationManager {
             return false;
         }
     }
-
 }

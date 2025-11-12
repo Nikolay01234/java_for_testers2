@@ -90,6 +90,9 @@ public class GroupHelper extends HelperBase{
         click(By.name("update"));
     }
 
+
+
+
     // Заполнение полей формы группы
     private void fillGroupForm(GroupData group) {
         type(By.name("group_name"), group.name());

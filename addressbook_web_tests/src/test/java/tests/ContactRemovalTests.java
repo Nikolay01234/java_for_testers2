@@ -9,6 +9,8 @@ public class ContactRemovalTests extends TestBase {
     // Если нет контакта, то он будет создан, а затем удалён
     @Test
     public void CanRemoveContact() throws InterruptedException {
+        // contacts() - в этом случае сработает ленивая инициализация
+        // при первом обращении к методу contacts() помощник будет проинициализирован
         if (!app.contacts().isContactPresent()) {
             app.contacts().createContact(new ContactData("lastName", "firstName", "address", "email", "phone"));
         }

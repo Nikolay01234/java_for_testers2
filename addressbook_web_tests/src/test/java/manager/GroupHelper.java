@@ -22,11 +22,11 @@ public class GroupHelper extends HelperBase{
         }
     }
 
-    // Проверяет наличие элемента
-    public boolean isGroupPresent() {
-        openGroupsPage();
-        return manager.isElementPresent(By.name("selected[]"));
-    }
+//    // Проверяет наличие элемента
+//    public boolean isGroupPresent() {
+//        openGroupsPage();
+//        return manager.isElementPresent(By.name("selected[]"));
+//    }
 
     // Создаёт группу
     public void createGroup(GroupData group) throws InterruptedException {
@@ -44,7 +44,7 @@ public class GroupHelper extends HelperBase{
     public void removeGroup() {
         openGroupsPage();
         selectGroup();
-        removeSelectedGroup();
+        removeSelectedGroups();
         returnToGroupsPage();
     }
 
@@ -76,7 +76,7 @@ public class GroupHelper extends HelperBase{
     }
 
     // Жмём на кнопку "Delete group(s)"
-    private void removeSelectedGroup() {
+    private void removeSelectedGroups() {
         click(By.name("delete"));
     }
 
@@ -108,5 +108,28 @@ public class GroupHelper extends HelperBase{
     // Активация чек-бокса группы
     private void selectGroup() {
         click(By.name("selected[]"));
+    }
+
+    // Метод возвращает СПИСОК элементов - количество групп
+    public int getCount() {
+        openGroupsPage();
+        return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
+    public void removeAllGroups() {
+        openGroupsPage();
+        selectedAllGroups();
+        removeSelectedGroups();
+    }
+
+    private void selectedAllGroups() {
+        // Коллекция checkboxes, которая возвращает метод findElements
+        var checkboxes = manager.driver.findElements(By.name("selected[]"));
+        // Цикл пробегает по всем элементам коллекции checkboxes
+        // переменная checkbox последовательно принимает значения
+        // соответствующие элементам этой коллекции (этого списка)
+        for (var checkbox : checkboxes) {
+            checkbox.click();
+        }
     }
 }

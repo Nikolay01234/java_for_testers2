@@ -46,11 +46,11 @@ public class GroupHelper extends HelperBase{
     }
 
     // Модифицирует группу
-    public void modifyGroup(GroupData modifiedGroup) throws InterruptedException {
+    public void modifyGroup(GroupData group, GroupData modifiedGroup) throws InterruptedException {
         // открыть страницу групп
         openGroupsPage();
-        // выбрать группу
-        selectGroup(null);
+        // группа будет отмечена галочкой и потом модифицирована
+        selectGroup(group);
         // нажать на кнопку для модификации группы
         initGroupModification();
         // заполнить форму данными, которые содержатся
@@ -132,6 +132,7 @@ public class GroupHelper extends HelperBase{
     }
 
     public List<GroupData> getList() {
+        openGroupsPage();
         var groups = new ArrayList<GroupData>();
         // переменная spans получит все элементы, которые имеют класс "group" и тег span
         var spans = manager.driver.findElements(By.cssSelector("span.group"));

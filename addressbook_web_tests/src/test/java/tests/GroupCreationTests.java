@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GroupCreationTests extends TestBase{
@@ -51,23 +52,41 @@ public class GroupCreationTests extends TestBase{
     @MethodSource("groupProvider")
     // Тест, который имеет один параметр представляющий собой объект типа GroupData
     public void canCreateMultipleGroups(GroupData group) throws InterruptedException {
-        int groupCount = app.groups().getCount();
+        var oldGroups = app.groups().getList();
         // Создавать будем группу, которая передаётся в качестве параметра в тестируемую функцию
         app.groups().createGroup(group);
-        int newGroupCount = app.groups().getCount();
-        // новое полученное значение должно быть больше на 1
-        Assertions.assertEquals(groupCount + 1, newGroupCount);
+        var newGroups = app.groups().getList();
+        // Сортируем два списка.
+        // В обоих используются одинаковые правила сравнения элементов.
+        // Они упорядочиваются по возрастанию идентификаторов.
+        Comparator<GroupData> compareById = (o1, o2) -> {
+            return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
+        };
+        newGroups.sort(compareById);
+        // Строим копию списка oldGroups
+        var expectedList = new ArrayList<>(oldGroups);
+        // Созданная группа будет иметь идентификатор,
+        // такой же как у последнего элемента в списке newGroups
+        // Берём этот идентификатор -
+        expectedList.add(group.withId(newGroups.get(newGroups.size() - 1).id()).withHeader("").withFooter(""));
+        expectedList.sort(compareById);
+        // Сравниваем списки newGroups - туда добавлен ещё один элемент,
+        // и новый список фактически полученный из web приложения
+        Assertions.assertEquals(newGroups, expectedList);
     }
 
     @ParameterizedTest
     @MethodSource("negativeGroupProvider")
     // Тест, который имеет один параметр представляющий собой объект типа GroupData
     public void canNotCreateGroup(GroupData group) throws InterruptedException {
-        int groupCount = app.groups().getCount();
+        // Получаем старый список
+        var oldGroups = app.groups().getList();
         // Создавать будем группу, которая передаётся в качестве параметра в тестируемую функцию
         app.groups().createGroup(group);
+        // Получаем новый список
+        var newGroups = app.groups().getList();
         int newGroupCount = app.groups().getCount();
-        // новое полученное значение должно совпадать с уже имеющимся
-        Assertions.assertEquals(groupCount, newGroupCount);
+        // Сравниваем старый список с новым - списки должны совпасть
+        Assertions.assertEquals(newGroups, oldGroups);
     }
 }

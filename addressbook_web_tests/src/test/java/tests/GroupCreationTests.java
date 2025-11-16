@@ -2,7 +2,6 @@ package tests;
 
 import model.GroupData;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -24,14 +23,17 @@ public class GroupCreationTests extends TestBase{
                 for (var footer : List.of("", "group footer")) {
                     // будем добавлять в список генерируемых объектов разные варианты name, header, footer
                     // из трёх условий выше
-                    result.add(new GroupData(name, header, footer));
+                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
                 }
             }
         }
         for (int i = 0; i < 5; i++) {
             // в список добавляется объект типа GroupData
             // случайно сгенерированным именем, хедером, и футером
-            result.add(new GroupData(randomString(i * 10), randomString(i * 10), randomString(i * 10)));
+            result.add(new GroupData()
+                    .withName(randomString(i * 10))
+                    .withHeader(randomString(i * 10))
+                    .withFooter(randomString(i * 10)));
         }
         return result;
     }
@@ -41,7 +43,7 @@ public class GroupCreationTests extends TestBase{
         // Тип объектов, которые находятся в списке GroupData
         // ниже будет список групп, которые не должны создаваться
         var result = new ArrayList<GroupData>(List.of(
-                new GroupData("group name'", "", "")));
+                new GroupData("", "group name'", "", "")));
         return result;
     }
 

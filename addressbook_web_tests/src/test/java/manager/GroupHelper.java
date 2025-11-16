@@ -3,6 +3,9 @@ package manager;
 import model.GroupData;
 import org.openqa.selenium.By;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Класс помощник для работы с группами
 public class GroupHelper extends HelperBase{
 
@@ -22,12 +25,6 @@ public class GroupHelper extends HelperBase{
         }
     }
 
-//    // Проверяет наличие элемента
-//    public boolean isGroupPresent() {
-//        openGroupsPage();
-//        return manager.isElementPresent(By.name("selected[]"));
-//    }
-
     // Создаёт группу
     public void createGroup(GroupData group) throws InterruptedException {
         openGroupsPage();
@@ -41,19 +38,19 @@ public class GroupHelper extends HelperBase{
     }
 
     // Удаляет группу
-    public void removeGroup() {
+    public void removeGroup(GroupData group) throws InterruptedException {
         openGroupsPage();
-        selectGroup();
+        selectGroup(group);
         removeSelectedGroups();
         returnToGroupsPage();
     }
 
     // Модифицирует группу
-    public void modifyGroup(GroupData modifiedGroup) {
+    public void modifyGroup(GroupData modifiedGroup) throws InterruptedException {
         // открыть страницу групп
         openGroupsPage();
         // выбрать группу
-        selectGroup();
+        selectGroup(null);
         // нажать на кнопку для модификации группы
         initGroupModification();
         // заполнить форму данными, которые содержатся
@@ -90,9 +87,6 @@ public class GroupHelper extends HelperBase{
         click(By.name("update"));
     }
 
-
-
-
     // Заполнение полей формы группы
     private void fillGroupForm(GroupData group) {
         type(By.name("group_name"), group.name());
@@ -106,8 +100,12 @@ public class GroupHelper extends HelperBase{
     }
 
     // Активация чек-бокса группы
-    private void selectGroup() {
-        click(By.name("selected[]"));
+    // Принимает на вход параметр - объект типа GroupData,
+    // который содержит идентификатор нужной группы
+    private void selectGroup(GroupData group) throws InterruptedException {
+        Thread.sleep(1000);
+        click(By.cssSelector(String.format("input[value='%s']", group.id())));
+        //click(By.cssSelector(String.format("input[type=\"checkbox\"][value=\"%s\"]", group.id())));
     }
 
     // Метод возвращает СПИСОК элементов - количество групп
@@ -131,5 +129,21 @@ public class GroupHelper extends HelperBase{
         for (var checkbox : checkboxes) {
             checkbox.click();
         }
+    }
+
+    public List<GroupData> getList() {
+        var groups = new ArrayList<GroupData>();
+        // переменная spans получит все элементы, которые имеют класс "group" и тег span
+        var spans = manager.driver.findElements(By.cssSelector("span.group"));
+        for (var span : spans){
+            var name = span.getText();
+            // найдём чек-бокс, который находится внутри элемента span
+            var checkbox = span.findElement(By.name("selected[]"));
+            var id = checkbox.getAttribute("value");
+            // построенный объект помещаем в список,
+            // который будет возвращаться из метода getList.
+            groups.add(new GroupData().withId(id).withName(name));
+        }
+        return groups;
     }
 }

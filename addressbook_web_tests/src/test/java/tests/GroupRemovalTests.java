@@ -4,24 +4,40 @@ import model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class GroupRemovalTests extends TestBase {
+
     // Метод удаляет группу
     // Если нет группы, то группа будет создана, а потом удалена
     @Test
-    public void CanRemoveGroup() throws InterruptedException {
+    public void canRemoveGroup() throws InterruptedException {
         // Если ни одной группы нет, нужно создать новую группу
         if (app.groups().getCount() == 0) {
-            app.groups().createGroup(new GroupData("group name", "group header", "group footer"));
+            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
-        int groupCount = app.groups().getCount();
-        app.groups().removeGroup();
-        int newGroupCount = app.groups().getCount();
-        Assertions.assertEquals(groupCount - 1, newGroupCount);
+        // Список уже имеющихся групп
+        var oldGroups = app.groups().getList();
+        var rnd = new Random();
+        // случайным образом выбираем индекс элемента из списка oldGroups
+        var index = rnd.nextInt(oldGroups.size());
+        // удаляем группу по её индексу, который получен в строке выше
+        app.groups().removeGroup(oldGroups.get(index));
+        // После удаления группы получаем новый список групп
+        var newGroups = app.groups().getList();
+        // Строим копию списка oldGroups
+        var expectedList = new ArrayList<>(oldGroups);
+        // Удаляем элемент с заданным индексом
+        expectedList.remove(index);
+        // с expectedList сравниваем реальный список newGroups, полученный из приложения.
+        Assertions.assertEquals(newGroups, expectedList);
     }
+
     @Test
     void canRemoveAllGroupsAtOnce() throws InterruptedException {
         if (app.groups().getCount() == 0) {
-            app.groups().createGroup(new GroupData("group name", "group header", "group footer"));
+            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
         app.groups().removeAllGroups();
         Assertions.assertEquals(0, app.groups().getCount());

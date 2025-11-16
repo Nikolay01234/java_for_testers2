@@ -10,7 +10,7 @@ public class GroupModificationTests extends TestBase {
     void canModifyGroup() throws InterruptedException {
         // Если нет ни одной группы, то группа будет создана
         if (app.groups().getCount() == 0) {
-            app.groups().createGroup(new GroupData("group name", "group header", "group footer"));
+            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
         // Вызов метода, который будет модифицировать группу
         // В качестве параметра в modifyGroup будет перадан объект типа groupData,

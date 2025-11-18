@@ -73,10 +73,9 @@ public class ContactCreationTests extends TestBase {
         expectedList.sort(compareById);
         // Сравниваем списки newContacts - туда добавлен ещё один элемент,
         // и новый список newContacts фактически полученный из web приложения
-        System.out.println("newContacts " + newContacts);
-        System.out.println("expectedList" + expectedList);
-//                 newContacts - из веба
-//                expectedList - из кода
+        System.out.println("newContacts " + newContacts); //                 newContacts - из веба
+        System.out.println("expectedList" + expectedList); //                expectedList - из кода
+
         Assertions.assertEquals(newContacts, expectedList);
     }
 
@@ -94,28 +93,5 @@ public class ContactCreationTests extends TestBase {
         // Сравниваем старый список с новым - списки должны совпасть
         Assertions.assertEquals(newContacts, oldContacts);
     }
-
-//    @Test
-//    public void canCreateContact() throws InterruptedException {
-//        // createContact принимает параметр, который имеет тип ContactData
-//        app.contacts().createContact(new ContactData("lastName", "firstName", "address", "email@mail.ml", "+79998887766"));
-//    }
-
-
-//    @Test
-//    public void canCreateContact() throws InterruptedException {
-//        // createContact принимает параметр, который имеет тип ContactData
-//        app.contacts().createContact(new ContactData("lastName", "firstName", "address", "email@mail.ml", "+79998887766"));
-//    }
-//
-//    // Создаётся контакт со всеми пустыми полями
-//    @Test
-//    public void canCreateContactOnlyWithEmptyFields() throws InterruptedException {
-//        app.contacts().createContact(new ContactData());
-//    }
-//
-//    @Test
-//    public void canCreateContactWithLastNameOnly() throws InterruptedException {
-//        app.contacts().createContact(new ContactData().withLastName("someLastName"));
-//    }
+    
 }

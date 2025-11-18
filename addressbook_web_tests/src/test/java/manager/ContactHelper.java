@@ -140,7 +140,7 @@ public class ContactHelper extends HelperBase {
             // Берём элементы контакта из своих колонок
             var lastName = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(2)")).getText();
             var firstName = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(3)")).getText();
-            var address = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(3)")).getText();
+            var address = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(4)")).getText();
             // построенный объект помещаем в список, который будет возвращаться из метода getList.
             contacts.add(new ContactData().withContactId(id).withLastName(lastName).withFirstName(firstName).withAddress(address));
         }

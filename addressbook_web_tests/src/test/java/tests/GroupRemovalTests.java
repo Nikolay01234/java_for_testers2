@@ -23,6 +23,7 @@ public class GroupRemovalTests extends TestBase {
         // случайным образом выбираем индекс элемента из списка oldGroups
         var index = rnd.nextInt(oldGroups.size());
         // удаляем группу по её индексу, который получен в строке выше
+        Thread.sleep(2000);
         app.groups().removeGroup(oldGroups.get(index));
         // После удаления группы получаем новый список групп
         var newGroups = app.groups().getList();

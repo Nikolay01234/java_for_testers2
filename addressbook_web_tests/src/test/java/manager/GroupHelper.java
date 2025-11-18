@@ -105,7 +105,6 @@ public class GroupHelper extends HelperBase{
     private void selectGroup(GroupData group) throws InterruptedException {
         Thread.sleep(1000);
         click(By.cssSelector(String.format("input[value='%s']", group.id())));
-        //click(By.cssSelector(String.format("input[type=\"checkbox\"][value=\"%s\"]", group.id())));
     }
 
     // Метод возвращает СПИСОК элементов - количество групп

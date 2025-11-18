@@ -3,6 +3,9 @@ package manager;
 import model.ContactData;
 import org.openqa.selenium.By;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Класс помощник для работы с контактами
 public class ContactHelper extends HelperBase {
 
@@ -20,14 +23,6 @@ public class ContactHelper extends HelperBase {
         manager.driver.findElement(By.linkText("home")).click();
     }
 
-
-
-    // Проверяет наличие элемента
-    public boolean isContactPresent() {
-        openContactsPage();
-        return manager.isElementPresent(By.xpath("//img[@alt=\'vCard\']"));
-    }
-
     // Создаёт контакт
     public void createContact(ContactData contact) throws InterruptedException {
         openContactsPage();
@@ -38,19 +33,19 @@ public class ContactHelper extends HelperBase {
     }
 
     // Удаляет контакт
-    public void removeContact() {
+    public void removeContact(ContactData contact) throws InterruptedException {
         openContactsPage();
-        selectContact();
-        removeSelectedContact();
+        selectContact(contact);
+        removeSelectedContacts();
         returnToContactsPage();
     }
 
     // Модифицирует контакт
-    public void modifyContact(ContactData modifiedContact) throws InterruptedException {
+    public void modifyContact(ContactData contact, ContactData modifiedContact) throws InterruptedException {
         // Открыть страницу контактов
         openContactsPage();
         // Выбрать контакт
-        selectContact();
+        selectContact(contact);
         // Нажать на кнопку для модификации контакта
         initContactModification();
         // Заполнить форму данными, которые содержатся
@@ -67,16 +62,14 @@ public class ContactHelper extends HelperBase {
         click(By.name("submit"));
     }
 
-    // Жмём на кнопку
+    // Жмём на кнопку для создания нового контакта
     private void initContactCreation() throws InterruptedException {
         Thread.sleep(2000);
-        System.out.println("Жмём на кнопку ");
         click(By.linkText("add new"));
-        //manager.driver.findElement(By.linkText("add new")).click();
     }
 
     // Жмём на кнопку "Delete"
-    private void removeSelectedContact() {
+    private void removeSelectedContacts() {
         click(By.name("delete"));
     }
 
@@ -105,8 +98,53 @@ public class ContactHelper extends HelperBase {
     }
 
     // Активация чек-бокса контакта
-    private void selectContact() {
-        click(By.name("selected[]"));
+    // Принимает на вход параметр - объект типа ContactData,
+    // который содержит идентификатор нужного контакта
+    private void selectContact(ContactData contact) throws InterruptedException {
+        Thread.sleep(1000);
+        click(By.cssSelector(String.format("input[value='%s']", contact.id())));
+    }
+
+    // Метод возвращает СПИСОК контактов - количество контактов
+    public int getCount() {
+        openContactsPage();
+        return manager.driver.findElements(By.name("selected[]")).size();
+    }
+
+    public void removeAllContacts() {
+        openContactsPage();
+        selectedAllContacts();
+        removeSelectedContacts();
+    }
+
+    private void selectedAllContacts() {
+        // Коллекция checkboxes, которая возвращает метод findElements
+        var checkboxes = manager.driver.findElements(By.name("selected[]"));
+        // Цикл пробегает по всем элементам коллекции checkboxes
+        // переменная checkbox последовательно принимает значения
+        // соответствующие элементам этой коллекции (этого списка)
+        for (var checkbox : checkboxes) {
+            checkbox.click();
+        }
+    }
+
+    public List<ContactData> getList() throws InterruptedException {
+        openContactsPage();
+        var contacts = new ArrayList<ContactData>();
+        // переменная contactCheckbox получит все элементы, которые имеют css селектор "tr[name^=\"entry\"]"
+        var contactString = manager.driver.findElements(By.cssSelector("tr[name^=\"entry\"]"));
+        for (var contact : contactString){
+            // найдём чек-бокс, который находится внутри элемента, который имеет css селектор "tr[name^=\"entry\"]"
+            var checkbox = contact.findElement(By.name("selected[]"));
+            var id = checkbox.getAttribute("value");
+            // Берём элементы контакта из своих колонок
+            var lastName = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(2)")).getText();
+            var firstName = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(3)")).getText();
+            var address = contact.findElement(By.cssSelector("[name=\"entry\"] > td:nth-child(3)")).getText();
+            // построенный объект помещаем в список, который будет возвращаться из метода getList.
+            contacts.add(new ContactData().withContactId(id).withLastName(lastName).withFirstName(firstName).withAddress(address));
+        }
+        return contacts;
     }
 
 }

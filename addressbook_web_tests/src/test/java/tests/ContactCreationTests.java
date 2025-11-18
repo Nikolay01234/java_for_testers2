@@ -68,8 +68,8 @@ public class ContactCreationTests extends TestBase {
         var expectedList = new ArrayList<>(oldContacts);
         // Созданный контакт будет иметь идентификатор, такой же как у последнего элемента в списке newContacts
         // Берём этот идентификатор
-        expectedList.add(contact.withContactId(newContacts.get(newContacts.size() - 1).id()).withLastName("").withFirstName(""));
-        //expectedList.add(contact.withContactId(newContacts.get(newContacts.size() - 1).id()));
+        //expectedList.add(contact.withContactId(newContacts.get(newContacts.size() - 1).id()).withLastName("").withFirstName(""));
+        expectedList.add(contact.withContactId(newContacts.get(newContacts.size() - 1).id()));
         expectedList.sort(compareById);
         // Сравниваем списки newContacts - туда добавлен ещё один элемент,
         // и новый список newContacts фактически полученный из web приложения
@@ -93,5 +93,5 @@ public class ContactCreationTests extends TestBase {
         // Сравниваем старый список с новым - списки должны совпасть
         Assertions.assertEquals(newContacts, oldContacts);
     }
-    
+
 }

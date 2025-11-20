@@ -47,7 +47,7 @@ public class ContactHelper extends HelperBase {
         // Выбрать контакт
         selectContact(contact);
         // Нажать на кнопку для модификации контакта
-        initContactModification();
+        initContactModification(contact);
         // Заполнить форму данными, которые содержатся
         // в объекте переданном в качестве параметра
         fillContactForm(modifiedContact);
@@ -93,8 +93,10 @@ public class ContactHelper extends HelperBase {
     }
 
     // Жмём на кнопку Edit, чтобы модифицировать контакт
-    private void initContactModification() {
-        click(By.xpath("//img[@alt=\'Edit\']"));
+    // Метод принимает объект класса ContactData
+    private void initContactModification(ContactData contact) {
+        // клик по локатору, где id берётся из свойства объекта класса
+        click(By.xpath(String.format("//a[@href='edit.php?id=%s']", contact.id())));
     }
 
     // Активация чек-бокса контакта
@@ -108,6 +110,7 @@ public class ContactHelper extends HelperBase {
     // Метод возвращает СПИСОК контактов - количество контактов
     public int getCount() {
         openContactsPage();
+        // вернёт количество всех элементов (findElements), которые "подходят" под локатор "selected[]"
         return manager.driver.findElements(By.name("selected[]")).size();
     }
 

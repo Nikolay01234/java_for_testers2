@@ -27,6 +27,14 @@ public class CollectionTests {
 
         list.set(0, "d");
         Assertions.assertEquals("d", list.get(0));
-    }
 
+        list.add(1, "F");
+
+        // Проверяем размер списка после добавления элемента
+        Assertions.assertEquals(4, list.size());
+
+        for (String s : list) {
+            System.out.println(s);
+        }
+    }
 }

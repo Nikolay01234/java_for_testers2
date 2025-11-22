@@ -1,6 +1,6 @@
-package manager;
+package ru.manager;
 
-import model.ContactData;
+import ru.model.ContactData;
 import org.openqa.selenium.By;
 
 import java.util.ArrayList;

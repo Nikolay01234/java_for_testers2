@@ -1,4 +1,4 @@
-package manager;
+package ru.manager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;

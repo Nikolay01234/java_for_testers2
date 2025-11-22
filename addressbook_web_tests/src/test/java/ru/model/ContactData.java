@@ -1,4 +1,4 @@
-package model;
+package ru.model;
 
 public record ContactData(String id, String lastName, String firstName, String address, String email, String phone, String photo) {
 

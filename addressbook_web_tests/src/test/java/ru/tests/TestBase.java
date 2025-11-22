@@ -1,6 +1,6 @@
-package tests;
+package ru.tests;
 
-import manager.ApplicationManager;
+import ru.manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;

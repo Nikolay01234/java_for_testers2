@@ -1,6 +1,6 @@
-package manager;
+package ru.manager;
 
-import model.GroupData;
+import ru.model.GroupData;
 import org.openqa.selenium.By;
 
 import java.util.ArrayList;

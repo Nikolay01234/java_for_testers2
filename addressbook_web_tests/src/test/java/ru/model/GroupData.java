@@ -1,4 +1,4 @@
-package model;
+package ru.model;
 
 // класс (record) GroupData моделирует группу - Group
 // у группы есть три поля "group name", "group header", "group footer"

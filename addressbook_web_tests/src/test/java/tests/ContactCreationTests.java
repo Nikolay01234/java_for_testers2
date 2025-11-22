@@ -46,7 +46,7 @@ public class ContactCreationTests extends TestBase {
         // Тип объектов, которые находятся в списке ContactData
         // ниже будет список групп, которые не должны создаваться
         var result = new ArrayList<ContactData>(List.of(
-                new ContactData("","lastName'", "", "", "", "")));
+                new ContactData("","lastName'", "", "", "", "", "")));
         return result;
     }
 
@@ -73,9 +73,8 @@ public class ContactCreationTests extends TestBase {
         expectedList.sort(compareById);
         // Сравниваем списки newContacts - туда добавлен ещё один элемент,
         // и новый список newContacts фактически полученный из web приложения
-        System.out.println("newContacts " + newContacts); //                 newContacts - из веба
-        System.out.println("expectedList" + expectedList); //                expectedList - из кода
-
+        //System.out.println("newContacts " + newContacts); //                 newContacts - из веба
+        //System.out.println("expectedList" + expectedList); //                expectedList - из кода
         Assertions.assertEquals(newContacts, expectedList);
     }
 
@@ -92,6 +91,15 @@ public class ContactCreationTests extends TestBase {
         int newContactCount = app.contacts().getCount();
         // Сравниваем старый список с новым - списки должны совпасть
         Assertions.assertEquals(newContacts, oldContacts);
+    }
+
+    @Test
+    void canCreateContact() throws InterruptedException {
+        var contact = new ContactData()
+                .withFirstName(randomString(10))
+                .withLastName(randomString(10))
+                .withPhoto("src/test/resources/images/avatar.png");
+        app.contacts().createContact(contact);
     }
 
 }

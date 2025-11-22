@@ -17,7 +17,7 @@ public class ContactRemovalTests extends TestBase {
         // contacts() - в этом случае сработает ленивая инициализация
         // при первом обращении к методу contacts() помощник будет проинициализирован
         if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone"));
+            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
         }
         var oldContacts = app.contacts().getList();
         var rnd = new Random();
@@ -32,7 +32,7 @@ public class ContactRemovalTests extends TestBase {
     @Test
     void canRemoveAllContactsAtOnce() throws InterruptedException {
         if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone"));
+            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
         }
         app.contacts().removeAllContacts();
         Assertions.assertEquals(0, app.contacts().getCount());

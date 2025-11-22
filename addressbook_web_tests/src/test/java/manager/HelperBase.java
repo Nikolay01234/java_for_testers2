@@ -2,6 +2,8 @@ package manager;
 
 import org.openqa.selenium.By;
 
+import java.nio.file.Paths;
+
 public class HelperBase {
 
     // Ссылка на делегирующий класс manager
@@ -22,5 +24,20 @@ public class HelperBase {
         click(locator);
         manager.driver.findElement(locator).clear();
         manager.driver.findElement(locator).sendKeys(text);
+    }
+
+    // Метод прикрепляет картинку к контакту
+    protected void attach(By locator, String file) {
+
+        if (file != null && !file.isEmpty()) {
+            manager.driver
+                    .findElement(locator)
+                    .sendKeys(Paths.get(file)
+                            .toAbsolutePath().toString());
+        } else {
+            return;
+        }
+
+
     }
 }

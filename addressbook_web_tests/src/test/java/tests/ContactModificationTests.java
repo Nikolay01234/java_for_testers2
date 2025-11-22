@@ -14,7 +14,7 @@ public class ContactModificationTests extends TestBase {
     void canModifyContact() throws InterruptedException {
         // Если нет ни одного контакта, то контакт будет создан
         if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone"));
+            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
         }
         // Список уже имеющихся контактов
         var oldContacts = app.contacts().getList();

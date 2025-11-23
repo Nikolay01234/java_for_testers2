@@ -101,7 +101,7 @@ public class ContactHelperCopy extends HelperBase {
 
     // Жмём на кнопку Edit, чтобы модифицировать контакт
     private void initContactModification() {
-        click(By.xpath("//img[@alt=\'Edit\']"));
+        click(By.xpath("//img[@alt='Edit']"));
     }
 
     // Активация чек-бокса контакта

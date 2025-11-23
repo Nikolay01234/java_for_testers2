@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -14,31 +18,38 @@ import java.util.List;
 public class ContactCreationTests extends TestBase {
 
     // Метод будет возвращать список объектов типа ContactData
-    public static List<ContactData> contactProvider() throws InterruptedException {
+    public static List<ContactData> contactProvider() throws InterruptedException, IOException {
         // Тип объектов, которые находятся в списке ContactData
         var result = new ArrayList<ContactData>(List.of());
         // цикл, который перебирает два возможных значения для lastName контакта
         // для каждого из этих lastName, будет вложенный цикл, который перебирает
         // два возможных значений для firstName
-        for (var lastName : List.of("", "contact lastName")) {
-            for (var firstName : List.of("", "contact firstName")){
-                // для каждого сочетания lastName и firstName будем перебирать разные значения для address
-                for (var address : List.of("", "contact address")) {
-                    // будем добавлять в список генерируемых объектов разные варианты lastName, firstName, address
-                    // из трёх условий выше
-                    Thread.sleep(500);
-                    result.add(new ContactData().withLastName(lastName).withFirstName(firstName).withAddress(address));
-                }
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            // в список добавляется объект типа ContactData
-            // случайно сгенерированным astName, firstName, address
-            result.add(new ContactData()
-                    .withLastName(CommonFunctions.randomString(i * 10))
-                    .withFirstName(CommonFunctions.randomString(i * 10))
-                    .withAddress(CommonFunctions.randomString(i * 10)));
-        }
+
+        // Ниже цикл for закомментирован, т.к. ждём, что данные для теста будут взяты из файла "contacts.json",
+        // и которые были сгенерированы внутри Generator
+//        for (var lastName : List.of("", "contact lastName")) {
+//            for (var firstName : List.of("", "contact firstName")){
+//                // для каждого сочетания lastName и firstName будем перебирать разные значения для address
+//                for (var address : List.of("", "contact address")) {
+//                    // будем добавлять в список генерируемых объектов разные варианты lastName, firstName, address
+//                    // из трёх условий выше
+//                    Thread.sleep(500);
+//                    result.add(new ContactData().withLastName(lastName).withFirstName(firstName).withAddress(address));
+//                }
+//            }
+//        }
+
+//        for (int i = 0; i < 5; i++) {
+//            // в список добавляется объект типа ContactData
+//            // случайно сгенерированным astName, firstName, address
+//            result.add(new ContactData()
+//                    .withLastName(CommonFunctions.randomString(i * 10))
+//                    .withFirstName(CommonFunctions.randomString(i * 10))
+//                    .withAddress(CommonFunctions.randomString(i * 10)));
+//        }
+        ObjectMapper mapper = new ObjectMapper();
+        var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>() {});
+        result.addAll(value);
         return result;
     }
 

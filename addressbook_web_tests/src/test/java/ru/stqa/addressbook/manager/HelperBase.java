@@ -35,7 +35,6 @@ public class HelperBase {
                     .sendKeys(Paths.get(file)
                             .toAbsolutePath().toString());
         } else {
-            return;
         }
 
 

@@ -5,7 +5,11 @@ import ru.stqa.addressbook.model.GroupData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,30 +17,33 @@ import java.util.List;
 public class GroupCreationTests extends TestBase{
 
     // Метод будет возвращать список объектов типа GroupData
-    public static List<GroupData> groupProvider() {
+    public static List<GroupData> groupProvider() throws IOException {
         // Тип объектов, которые находятся в списке GroupData
         var result = new ArrayList<GroupData>();
         // цикл, который перебирает два возможных значения для названия группы
         // для каждого из этих названий, будет вложенный цикл, который перебирает
         // два возможных значений хедера
-        for (var name : List.of("", "group name")) {
-            for (var header : List.of("", "group header")){
-                // для каждого сочетания имени и хедера будем перебирать разные значения для футера
-                for (var footer : List.of("", "group footer")) {
-                    // будем добавлять в список генерируемых объектов разные варианты name, header, footer
-                    // из трёх условий выше
-                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
-                }
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            // в список добавляется объект типа GroupData
-            // случайно сгенерированным именем, хедером, и футером
-            result.add(new GroupData()
-                    .withName(CommonFunctions.randomString(i * 10))
-                    .withHeader(CommonFunctions.randomString(i * 10))
-                    .withFooter(CommonFunctions.randomString(i * 10)));
-        }
+//        for (var name : List.of("", "group name")) {
+//            for (var header : List.of("", "group header")){
+//                // для каждого сочетания имени и хедера будем перебирать разные значения для футера
+//                for (var footer : List.of("", "group footer")) {
+//                    // будем добавлять в список генерируемых объектов разные варианты name, header, footer
+//                    // из трёх условий выше
+//                    result.add(new GroupData().withName(name).withHeader(header).withFooter(footer));
+//                }
+//            }
+//        }
+//        for (int i = 0; i < 5; i++) {
+//            // в список добавляется объект типа GroupData
+//            // случайно сгенерированным именем, хедером, и футером
+//            result.add(new GroupData()
+//                    .withName(CommonFunctions.randomString(i * 10))
+//                    .withHeader(CommonFunctions.randomString(i * 10))
+//                    .withFooter(CommonFunctions.randomString(i * 10)));
+//        }
+        ObjectMapper mapper = new ObjectMapper();
+        var value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {});
+        result.addAll(value);
         return result;
     }
 

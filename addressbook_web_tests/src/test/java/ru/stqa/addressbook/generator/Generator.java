@@ -5,27 +5,32 @@ import com.beust.jcommander.Parameter;
 import ru.stqa.addressbook.common.CommonFunctions;
 import ru.stqa.addressbook.model.ContactData;
 import ru.stqa.addressbook.model.GroupData;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Generator {
 
     // свойство, которое соответствует параметрам запуска
-    @Parameter(names={"--type", "-t"})
+    @Parameter(names = {"--type", "-t"})
     // тип генерируемых значений
-    String type;
+            String type;
 
-    @Parameter(names={"--outpoot", "-o"})
+    @Parameter(names = {"--output", "-o"})
     String output;
 
-    @Parameter(names={"--format", "-f"})
+    @Parameter(names = {"--format", "-f"})
     String format;
 
-    @Parameter(names={"--count", "-n"})
+    @Parameter(names = {"--count", "-n"})
     int count;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         var generator = new Generator();
         // код, который будет анализировать опции коммандной строки передаваемые через переменную args
         // создаётся парсер(анализатор) коммандной строки,
@@ -42,7 +47,7 @@ public class Generator {
 
     // Метод генерирует вспомогательные данные
     // генерация данных и их сохранение
-    private void run() {
+    private void run() throws IOException {
         var data = generate();
         save(data);
     }
@@ -86,6 +91,19 @@ public class Generator {
         return result;
     }
 
-    private void save(Object data) {
+    private void save(Object data) throws IOException {
+        if ("json".equals(format)) {
+//            ObjectMapper mapper = new ObjectMapper();
+//            mapper.isEnabled(SerializationFeature.INDENT_OUTPUT);
+            ObjectMapper mapper = JsonMapper.builder()
+                    .enable(SerializationFeature.INDENT_OUTPUT)
+                    .build();
+            // Данные из переменной data сохраняются в указываемый файл
+            // Название файла будет передано в качестве опции запуска
+            // и содержатся в переменной output
+            mapper.writeValue(new File(output), data);
+        } else {
+            throw new IllegalArgumentException("Неизвестный формат данных " + format);
+        }
     }
 }

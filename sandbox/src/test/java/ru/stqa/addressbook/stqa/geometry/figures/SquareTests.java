@@ -50,7 +50,7 @@ public class SquareTests {
 //        double s2area = s2.area();
 //        Assertions.assertTrue(Objects.equals(s1area, s2area));  // сравнение успешно
 //        Assertions.assertTrue(Objects.equals(s1.area(), s2.area())); // сравнение успешно
-        Assertions.assertTrue(s1.equals(s2)); // работает, только когда класс записан,как record
+        Assertions.assertEquals(s1, s2); // работает, только когда класс записан,как record
     }
 
     @Test

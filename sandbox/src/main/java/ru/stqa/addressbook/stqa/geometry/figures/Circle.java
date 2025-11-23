@@ -3,7 +3,7 @@ package ru.stqa.addressbook.stqa.geometry.figures;
 public class Circle {
 
     // Свойства класса
-    private double radius;
+    private final double radius;
 
     public Circle(double radius) {
         this.radius = radius;

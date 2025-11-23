@@ -8,6 +8,7 @@ import ru.stqa.addressbook.model.GroupData;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.File;
@@ -111,7 +112,10 @@ public class Generator {
         } if ("yaml".equals(format)) {
             var mapper = new YAMLMapper();
             mapper.writeValue(new File(output), data);
-        } else {
+        } if ("xml".equals(format)) {
+            var mapper = new XmlMapper();
+            mapper.writeValue(new File(output), data);
+        }else {
             throw new IllegalArgumentException("Неизвестный формат данных " + format);
         }
     }

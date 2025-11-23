@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.stqa.addressbook.model.GroupData;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.dataformat.xml.XmlMapper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,11 +59,13 @@ public class ContactCreationTests extends TestBase {
 //            }
 //        }
 
-        // Читаем целиком из файла в переменную
-        var json = Files.readString(Paths.get("contacts.json"));
-        // Анализируем полученный текст с помощью ObjectMapper
-        ObjectMapper mapper = new ObjectMapper();
-        var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>() {});
+//        // Читаем целиком из файла в переменную
+//        var json = Files.readString(Paths.get("contacts.json"));
+//        // Анализируем полученный текст с помощью ObjectMapper
+//        ObjectMapper mapper = new ObjectMapper();
+//        var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>() {});
+        var mapper = new XmlMapper();
+        var value = mapper.readValue(new File("contacts.xml"), new TypeReference<List<ContactData>>() {});
         result.addAll(value);
         return result;
     }

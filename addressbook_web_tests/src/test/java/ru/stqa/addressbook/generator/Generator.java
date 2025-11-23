@@ -10,6 +10,7 @@ import tools.jackson.databind.SerializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,16 +94,20 @@ public class Generator {
 
     private void save(Object data) throws IOException {
         if ("json".equals(format)) {
-//            ObjectMapper mapper = new ObjectMapper();
-//            mapper.isEnabled(SerializationFeature.INDENT_OUTPUT);
             ObjectMapper mapper = JsonMapper.builder()
                     .enable(SerializationFeature.INDENT_OUTPUT)
                     .build();
             // Данные из переменной data сохраняются в указываемый файл
             // Название файла будет передано в качестве опции запуска
             // и содержатся в переменной output
-            mapper.writeValue(new File(output), data);
-        } else {
+            // Сохраняем JSON как строку
+            var json = mapper.writeValueAsString(data);
+            // После того, как выполнится код в фигурных скобках,
+            // для переменной writer будет вызван метод close() и файл будет закрыт
+            try (var writer = new FileWriter(output)) {
+                writer.write(json);
+            }
+        }else {
             throw new IllegalArgumentException("Неизвестный формат данных " + format);
         }
     }

@@ -9,8 +9,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -39,14 +43,23 @@ public class ContactCreationTests extends TestBase {
 //            }
 //        }
 
-//        for (int i = 0; i < 5; i++) {
-//            // в список добавляется объект типа ContactData
-//            // случайно сгенерированным astName, firstName, address
-//            result.add(new ContactData()
-//                    .withLastName(CommonFunctions.randomString(i * 10))
-//                    .withFirstName(CommonFunctions.randomString(i * 10))
-//                    .withAddress(CommonFunctions.randomString(i * 10)));
+//        var json = "";
+//        // используем такую конструкцию, чтобы в конце чтения
+//        // файл автоматически закрылся
+//        try (var reader = new FileReader("contacts.json");
+//             var breader = new BufferedReader(reader)
+//        ) {
+//            // читаем файл построчно в переменную
+//            var line = breader.readLine();
+//            while (line != null) {
+//                json = json + line;
+//                line = breader.readLine();
+//            }
 //        }
+
+        // Читаем целиком из файла в переменную
+        var json = Files.readString(Paths.get("contacts.json"));
+        // Анализируем полученный текст с помощью ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
         var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>() {});
         result.addAll(value);

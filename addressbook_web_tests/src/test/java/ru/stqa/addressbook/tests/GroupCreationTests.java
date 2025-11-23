@@ -8,8 +8,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -33,16 +37,26 @@ public class GroupCreationTests extends TestBase{
 //                }
 //            }
 //        }
-//        for (int i = 0; i < 5; i++) {
-//            // в список добавляется объект типа GroupData
-//            // случайно сгенерированным именем, хедером, и футером
-//            result.add(new GroupData()
-//                    .withName(CommonFunctions.randomString(i * 10))
-//                    .withHeader(CommonFunctions.randomString(i * 10))
-//                    .withFooter(CommonFunctions.randomString(i * 10)));
-//        }
+
+        var json = "";
+        // используем такую конструкцию, чтобы в конце чтения
+        // файл автоматически закрылся
+        try (var reader = new FileReader("groups.json");
+            var breader = new BufferedReader(reader)
+        ) {
+            // читаем файл построчно в переменную
+            var line = breader.readLine();
+            while (line != null) {
+                json = json + line;
+                line = breader.readLine();
+            }
+        }
+
+        // Читаем целиком из файла в переменную
+        //var json = Files.readString(Paths.get("groups.json"));
+        // Анализируем полученный текст с помощью ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
-        var value = mapper.readValue(new File("groups.json"), new TypeReference<List<GroupData>>() {});
+        var value = mapper.readValue(json, new TypeReference<List<GroupData>>() {});
         result.addAll(value);
         return result;
     }

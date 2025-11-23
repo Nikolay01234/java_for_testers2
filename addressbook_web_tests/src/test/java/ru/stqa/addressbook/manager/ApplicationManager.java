@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.util.Properties;
+
 // Класс, в котором будут находиться методы, предназначенные для управления
 // тестируемым приложением, для взаимодействия с ним.
 public class ApplicationManager {
@@ -22,8 +24,11 @@ public class ApplicationManager {
     // Ссылка на помощника ContactHelper
     private ContactHelper contacts;
 
+    private Properties properties;
+
     // Инициализация драйвера, закрытие браузера, переход на страницу addressbook, а также ввод логина и пароля
-    public void init(String browser) {
+    public void init(String browser, Properties properties) throws InterruptedException {
+        this.properties = properties;
         if (driver == null) {
             if ("firefox".equals(browser)) {
                 driver = new FirefoxDriver();
@@ -34,9 +39,10 @@ public class ApplicationManager {
             }
             // тут (ниже) закрывается браузер
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
-            driver.get("http://localhost/addressbook/");
-            driver.manage().window().setSize(new Dimension(550, 692));
-            session().login("admin", "secret");
+            driver.get(properties.getProperty("web.basUrl"));
+            driver.manage().window().setSize(new Dimension(1076, 640));
+            Thread.sleep(1000);
+            session().login(properties.getProperty("web.username"), properties.getProperty("web.password"));
         }
     }
 

@@ -27,4 +27,9 @@ test {
     if (project.hasProperty("browser")){
         systemProperty("browser", project.property("browser"))
     }
+    // Проверяем, есть ли параметр, который задает свойство сборщика.
+    // И если есть, то устанавливаем его значение в качестве системного свойства для Java.
+    if (project.hasProperty("target")){
+        systemProperty("target", project.property("target"))
+    }
 }

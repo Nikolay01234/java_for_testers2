@@ -1,10 +1,13 @@
 package ru.stqa.addressbook.tests;
 
-import ru.stqa.addressbook.manager.ApplicationManager;
 import org.junit.jupiter.api.BeforeEach;
+import ru.stqa.addressbook.manager.ApplicationManager;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Properties;
 import java.util.Random;
 
 // Базовый класс для тестов. Parent class
@@ -18,12 +21,19 @@ public class TestBase {
     // Инициализирует ApplicationManager
     // в методе init() происходит переход на страницу "http://localhost/addressbook/" и ввод логина/пароля
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException, InterruptedException {
         if (app == null) { // если инициализация ещё не выполнялась
+            // читаем содержимое конфигурационного файла "local.properties"
+            // создаём новый объект типа new Properties()
+            var properties = new Properties();
+            // если никакого значения для этого системного свойства не указано,
+            // то конфиги читаем из файла "local.properties"
+            properties.load(new FileReader(System.getProperty("target", "local.properties")));
             app = new ApplicationManager();
+            // Задано системное свойство browser с дефолтным значением firefox
+            // После того, как конфиг был прочитан, данные будут переданы в init()
+            app.init(System.getProperty("browser", "firefox"), properties);
         }
-        // Задано системное свойство browser с дефолтным значением firefox
-        app.init(System.getProperty("browser", "firefox"));
     }
 
     // метод в качестве параметра, принимает путь к деректории с картинками

@@ -59,13 +59,13 @@ public class ContactCreationTests extends TestBase {
 //            }
 //        }
 
-//        // Читаем целиком из файла в переменную
-//        var json = Files.readString(Paths.get("contacts.json"));
-//        // Анализируем полученный текст с помощью ObjectMapper
-//        ObjectMapper mapper = new ObjectMapper();
-//        var value = mapper.readValue(new File("contacts.json"), new TypeReference<List<ContactData>>() {});
-        var mapper = new XmlMapper();
-        var value = mapper.readValue(new File("contacts.xml"), new TypeReference<List<ContactData>>() {});
+        // Читаем целиком из файла в переменную
+        var json = Files.readString(Paths.get("contacts.json"));
+        // Анализируем полученный текст с помощью ObjectMapper
+        ObjectMapper mapper = new ObjectMapper();
+        var value = mapper.readValue(json, new TypeReference<List<ContactData>>() {});
+//        var mapper = new XmlMapper();
+//        var value = mapper.readValue(new File("contacts.xml"), new TypeReference<List<ContactData>>() {});
         result.addAll(value);
         return result;
     }

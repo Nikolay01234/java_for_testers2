@@ -55,13 +55,12 @@ public class GroupCreationTests extends TestBase{
 //        }
 
         // Читаем целиком из файла в переменную
-        //var json = Files.readString(Paths.get("groups.json"));
+        var json = Files.readString(Paths.get("groups.json"));
         // Анализируем полученный текст с помощью ObjectMapper
-        //ObjectMapper mapper = new ObjectMapper();
-        //var value = mapper.readValue(json, new TypeReference<List<GroupData>>() {});
-
-        var mapper = new XmlMapper();
-        var value = mapper.readValue(new File("groups.xml"), new TypeReference<List<GroupData>>() {});
+        ObjectMapper mapper = new ObjectMapper();
+        var value = mapper.readValue(json, new TypeReference<List<GroupData>>() {});
+//        var mapper = new XmlMapper();
+//        var value = mapper.readValue(new File("groups.xml"), new TypeReference<List<GroupData>>() {});
         result.addAll(value);
         return result;
     }

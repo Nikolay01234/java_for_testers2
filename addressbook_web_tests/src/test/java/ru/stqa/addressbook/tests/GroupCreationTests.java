@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -74,14 +75,22 @@ public class GroupCreationTests extends TestBase{
         return result;
     }
 
+    public static List<GroupData> singleRandomGroup() throws IOException {
+        return List.of(new GroupData()
+                .withName(CommonFunctions.randomString(10))
+                .withHeader(CommonFunctions.randomString(20))
+                .withFooter(CommonFunctions.randomString(30)));
+    }
+
     @ParameterizedTest
-    @MethodSource("groupProvider")
+    @MethodSource("singleRandomGroup")
     // Тест, который имеет один параметр представляющий собой объект типа GroupData
-    public void canCreateMultipleGroups(GroupData group) throws InterruptedException {
-        var oldGroups = app.groups().getList();
+    public void canCreateGroup(GroupData group) throws InterruptedException, SQLException {
+        // Загружаем старый список групп
+        var oldGroups = app.jdbc().getGroupList();
         // Создавать будем группу, которая передаётся в качестве параметра в тестируемую функцию
         app.groups().createGroup(group);
-        var newGroups = app.groups().getList();
+        var newGroups = app.jdbc().getGroupList();
         // Сортируем два списка.
         // В обоих используются одинаковые правила сравнения элементов.
         // Они упорядочиваются по возрастанию идентификаторов.
@@ -89,16 +98,24 @@ public class GroupCreationTests extends TestBase{
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newGroups.sort(compareById);
+        var maxId = newGroups.get(newGroups.size() - 1).id();
         // Строим копию списка oldGroups
         var expectedList = new ArrayList<>(oldGroups);
         // Созданная группа будет иметь идентификатор,
         // такой же как у последнего элемента в списке newGroups
         // Берём этот идентификатор -
-        expectedList.add(group.withId(newGroups.get(newGroups.size() - 1).id()).withHeader("").withFooter(""));
+        expectedList.add(group.withId(maxId));
         expectedList.sort(compareById);
         // Сравниваем списки newGroups - туда добавлен ещё один элемент,
         // и новый список фактически полученный из web приложения
         Assertions.assertEquals(newGroups, expectedList);
+
+        var newUiGroups = app.groups().getList();
+        newUiGroups.sort(compareById);
+        for (var i = 0; i < newUiGroups.size(); i++) {
+            Assertions.assertEquals(newUiGroups.get(i).id(), newGroups.get(i).id());
+            Assertions.assertEquals(newUiGroups.get(i).name(), newGroups.get(i).name());
+        }
     }
 
     @ParameterizedTest

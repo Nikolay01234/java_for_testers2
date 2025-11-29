@@ -24,6 +24,9 @@ public class ApplicationManager {
     // Ссылка на помощника ContactHelper
     private ContactHelper contacts;
 
+    // Ссылка на помощника JdbcHelper
+    private JdbcHelper jdbc;
+
     private Properties properties;
 
     // Инициализация драйвера, закрытие браузера, переход на страницу addressbook, а также ввод логина и пароля
@@ -70,6 +73,14 @@ public class ApplicationManager {
             contacts = new ContactHelper(this);
         }
         return contacts;
+    }
+
+    // Метод, который выполняет ленивую инициализацию помощника JdbcHelper
+    public JdbcHelper jdbc() {
+        if (jdbc == null) {
+            jdbc = new JdbcHelper(this);
+        }
+        return jdbc;
     }
 
     // Проверяет, есть ли элемент на странице, если элемента нет, то выкидывает исключение NoSuchElementException

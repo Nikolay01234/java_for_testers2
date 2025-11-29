@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -79,13 +80,23 @@ public class ContactCreationTests extends TestBase {
         return result;
     }
 
+    public static List<ContactData> singleRandomContact() throws IOException {
+        return List.of(new ContactData()
+                .withFirstName(CommonFunctions.randomString(10))
+                .withLastName(CommonFunctions.randomString(20))
+                .withAddress(CommonFunctions.randomString(30)));
+    }
+
     @ParameterizedTest
-    @MethodSource("contactProvider")
+    //@MethodSource("contactProvider")
+    @MethodSource("singleRandomContact")
     // Тест, который имеет один параметр представляющий собой объект типа ContactData
-    public void canCreateMultipleContacts(ContactData contact) throws InterruptedException {
-        var oldContacts = app.contacts().getList();
+    public void canCreateContact(ContactData contact) throws InterruptedException, SQLException {
+        // Загружаем старый список групп
+        //var oldContacts = app.contacts().getList();
+        var oldContacts = app.jdbc().getContactList();
         app.contacts().createContact(contact); // Создавать будем контакт, который передаётся в качестве параметра в тестируемую функцию
-        var newContacts = app.contacts().getList();
+        var newContacts = app.jdbc().getContactList();
         // Сортируем два списка.
         // В обоих используются одинаковые правила сравнения элементов.
         // Они упорядочиваются по возрастанию идентификаторов.
@@ -93,18 +104,26 @@ public class ContactCreationTests extends TestBase {
             return Integer.compare(Integer.parseInt(o1.id()), Integer.parseInt(o2.id()));
         };
         newContacts.sort(compareById);
+        var maxId = newContacts.get(newContacts.size() - 1).id();
+
         // Строим копию списка oldContacts
         var expectedList = new ArrayList<>(oldContacts);
         // Созданный контакт будет иметь идентификатор, такой же как у последнего элемента в списке newContacts
         // Берём этот идентификатор
-        //expectedList.add(contact.withContactId(newContacts.get(newContacts.size() - 1).id()).withLastName("").withFirstName(""));
-        expectedList.add(contact.withContactId(newContacts.get(newContacts.size() - 1).id()));
+        expectedList.add(contact.withContactId(maxId));
         expectedList.sort(compareById);
         // Сравниваем списки newContacts - туда добавлен ещё один элемент,
         // и новый список newContacts фактически полученный из web приложения
         //System.out.println("newContacts " + newContacts); //                 newContacts - из веба
         //System.out.println("expectedList" + expectedList); //                expectedList - из кода
         Assertions.assertEquals(newContacts, expectedList);
+
+        var newUiContacts = app.contacts().getList();
+        newUiContacts.sort(compareById);
+        for (var i = 0; i < newUiContacts.size(); i++) {
+            Assertions.assertEquals(newUiContacts.get(i).id(), newContacts.get(i).id());
+            Assertions.assertEquals(newUiContacts.get(i).lastName(), newContacts.get(i).lastName());
+        }
     }
 
     @ParameterizedTest

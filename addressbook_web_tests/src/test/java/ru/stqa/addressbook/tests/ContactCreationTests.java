@@ -120,6 +120,10 @@ public class ContactCreationTests extends TestBase {
 
         var newUiContacts = app.contacts().getList();
         newUiContacts.sort(compareById);
+        newContacts.sort(compareById);
+        System.out.println(newUiContacts);
+        System.out.println(newContacts);
+
         for (var i = 0; i < newUiContacts.size(); i++) {
             Assertions.assertEquals(newUiContacts.get(i).id(), newContacts.get(i).id());
             Assertions.assertEquals(newUiContacts.get(i).lastName(), newContacts.get(i).lastName());

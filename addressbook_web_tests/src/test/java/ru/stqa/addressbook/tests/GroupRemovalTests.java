@@ -14,11 +14,11 @@ public class GroupRemovalTests extends TestBase {
     @Test
     public void canRemoveGroup() throws InterruptedException {
         // Если ни одной группы нет, нужно создать новую группу
-        if (app.groups().getCount() == 0) {
-            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
         // Список уже имеющихся групп
-        var oldGroups = app.groups().getList();
+        var oldGroups = app.hbm().getGroupList();
         var rnd = new Random();
         // случайным образом выбираем индекс элемента из списка oldGroups
         var index = rnd.nextInt(oldGroups.size());
@@ -26,7 +26,7 @@ public class GroupRemovalTests extends TestBase {
         Thread.sleep(2000);
         app.groups().removeGroup(oldGroups.get(index));
         // После удаления группы получаем новый список групп
-        var newGroups = app.groups().getList();
+        var newGroups = app.hbm().getGroupList();
         // Строим копию списка oldGroups
         var expectedList = new ArrayList<>(oldGroups);
         // Удаляем элемент с заданным индексом
@@ -37,10 +37,10 @@ public class GroupRemovalTests extends TestBase {
 
     @Test
     void canRemoveAllGroupsAtOnce() throws InterruptedException {
-        if (app.groups().getCount() == 0) {
-            app.groups().createGroup(new GroupData("", "group name", "group header", "group footer"));
+        if (app.hbm().getGroupCount() == 0) {
+            app.hbm().createGroup(new GroupData("", "group name", "group header", "group footer"));
         }
         app.groups().removeAllGroups();
-        Assertions.assertEquals(0, app.groups().getCount());
+        Assertions.assertEquals(0, app.hbm().getGroupCount());
     }
 }

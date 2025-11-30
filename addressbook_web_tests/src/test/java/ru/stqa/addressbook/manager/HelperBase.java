@@ -33,10 +33,9 @@ public class HelperBase {
             manager.driver
                     .findElement(locator)
                     .sendKeys(Paths.get(file)
-                            .toAbsolutePath().toString());
+                    .toAbsolutePath().toString());
         } else {
+            System.out.println("файл не найден");
         }
-
-
     }
 }

@@ -15,14 +15,15 @@ public class ContactRemovalTests extends TestBase {
     public void canRemoveContact() throws InterruptedException {
         // contacts() - в этом случае сработает ленивая инициализация
         // при первом обращении к методу contacts() помощник будет проинициализирован
-        if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
+        if (app.hbm().getContactCount() == 0) {
+            //app.hbm().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
+            app.hbm().createContact(new ContactData("", "lastName", "firstName", "address", "", "", ""));
         }
-        var oldContacts = app.contacts().getList();
+        var oldContacts = app.hbm().getContactList();
         var rnd = new Random();
         var index = rnd.nextInt(oldContacts.size());
         app.contacts().removeContact(oldContacts.get(index));
-        var newContacts = app.contacts().getList();
+        var newContacts = app.hbm().getContactList();
         var expectedList = new ArrayList<>(oldContacts);
         expectedList.remove(index);
         Assertions.assertEquals(newContacts, expectedList);
@@ -30,11 +31,12 @@ public class ContactRemovalTests extends TestBase {
 
     @Test
     void canRemoveAllContactsAtOnce() throws InterruptedException {
-        if (app.contacts().getCount() == 0) {
-            app.contacts().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
+        if (app.hbm().getContactCount() == 0) {
+            app.hbm().createContact(new ContactData("", "lastName", "firstName", "address", "email", "phone", "photo"));
+            //app.hbm().createContact(new ContactData("", "lastName", "firstName", "address", "", "", ""));
         }
         app.contacts().removeAllContacts();
-        Assertions.assertEquals(0, app.contacts().getCount());
+        Thread.sleep(2000);
+        Assertions.assertEquals(0, app.hbm().getContactCount());
     }
-
 }

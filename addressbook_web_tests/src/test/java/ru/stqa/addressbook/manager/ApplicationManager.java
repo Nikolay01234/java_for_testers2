@@ -27,6 +27,9 @@ public class ApplicationManager {
     // Ссылка на помощника JdbcHelper
     private JdbcHelper jdbc;
 
+    // Ссылка на помощника HibernateHelper
+    private HibernateHelper hbm;
+
     private Properties properties;
 
     // Инициализация драйвера, закрытие браузера, переход на страницу addressbook, а также ввод логина и пароля
@@ -81,6 +84,14 @@ public class ApplicationManager {
             jdbc = new JdbcHelper(this);
         }
         return jdbc;
+    }
+
+    // Метод, который выполняет ленивую инициализацию помощника HibernateHelper
+    public HibernateHelper hbm() {
+        if (hbm == null) {
+            hbm = new HibernateHelper(this);
+        }
+        return hbm;
     }
 
     // Проверяет, есть ли элемент на странице, если элемента нет, то выкидывает исключение NoSuchElementException

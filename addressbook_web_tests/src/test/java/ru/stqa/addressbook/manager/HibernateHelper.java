@@ -54,23 +54,23 @@ public class HibernateHelper extends HelperBase {
     }
 
 
-//    // Из объекта ContactRecord строится объект ContactData
-//    static List<ContactData> convertList(List<ContactRecord> records) {
-//        List<ContactData> result = new ArrayList<>(List.of());
-//        for (var record : records) {
-//            result.add(convert(record));
-//        }
-//        return result;
-//    }
-//
-//    private static ContactData convert(ContactRecord record) {
-//        return new ContactData("" + record.id, record.firstname, record.lastname, record.address);
-//    }
-//
-//    public List<ContactData> getContactList() {
-//        return convertList(sessionFactory.fromSession(session -> {
-//            return session.createQuery("from ContactRecord", ContactRecord.class).list();
-//        }));
-//    }
+    // Из объекта ContactRecord строится объект ContactData
+    static List<ContactData> convertContactList(List<ContactRecord> records) {
+        List<ContactData> result = new ArrayList<>(List.of());
+        for (var record : records) {
+            result.add(convert(record));
+        }
+        return result;
+    }
+
+    private static ContactData convert(ContactRecord record) {
+        return new ContactData();
+    }
+
+    public List<ContactData> getContactList() {
+        return convertContactList(sessionFactory.fromSession(session -> {
+            return session.createQuery("from ContactRecord", ContactRecord.class).list();
+        }));
+    }
 
 }

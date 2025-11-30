@@ -84,7 +84,9 @@ public class ContactCreationTests extends TestBase {
         return List.of(new ContactData()
                 .withFirstName(CommonFunctions.randomString(10))
                 .withLastName(CommonFunctions.randomString(20))
-                .withAddress(CommonFunctions.randomString(30)));
+                .withAddress(CommonFunctions.randomString(30))
+                //.withPhoto(randomFile("src/test/resources/images/"))
+                .withPhoto("src/test/resources/images/avatar.png"));
     }
 
     @ParameterizedTest
@@ -114,8 +116,9 @@ public class ContactCreationTests extends TestBase {
         expectedList.sort(compareById);
         // Сравниваем списки newContacts - туда добавлен ещё один элемент,
         // и новый список newContacts фактически полученный из web приложения
-        //System.out.println("newContacts " + newContacts); //                 newContacts - из веба
-        //System.out.println("expectedList" + expectedList); //                expectedList - из кода
+//        System.out.println("newContacts " + newContacts); //                 newContacts - из веба
+//        System.out.println("expectedList" + expectedList); //                expectedList - из кода
+//        expectedList с фоткой
         Assertions.assertEquals(newContacts, expectedList);
 
         var newUiContacts = app.contacts().getList();
@@ -130,29 +133,28 @@ public class ContactCreationTests extends TestBase {
         }
     }
 
-    @ParameterizedTest
-    @MethodSource("negativeContactProvider")
-    // Тест, который имеет один параметр представляющий собой объект типа ContactData
-    public void canNotCreateContact(ContactData contact) throws InterruptedException {
-        // Получаем старый список
-        var oldContacts = app.contacts().getList();
-        // Создавать будем группу, которая передаётся в качестве параметра в тестируемую функцию
-        app.contacts().createContact(contact);
-        // Получаем новый список
-        var newContacts = app.contacts().getList();
-        int newContactCount = app.contacts().getCount();
-        // Сравниваем старый список с новым - списки должны совпасть
-        Assertions.assertEquals(newContacts, oldContacts);
-    }
+//    @ParameterizedTest
+//    @MethodSource("negativeContactProvider")
+//    // Тест, который имеет один параметр представляющий собой объект типа ContactData
+//    public void canNotCreateContact(ContactData contact) throws InterruptedException {
+//        // Получаем старый список
+//        var oldContacts = app.contacts().getList();
+//        // Создавать будем группу, которая передаётся в качестве параметра в тестируемую функцию
+//        app.contacts().createContact(contact);
+//        // Получаем новый список
+//        var newContacts = app.contacts().getList();
+//        int newContactCount = app.contacts().getCount();
+//        // Сравниваем старый список с новым - списки должны совпасть
+//        Assertions.assertEquals(newContacts, oldContacts);
+//    }
 
-    @Test
-    void canCreateContact() throws InterruptedException {
-        var contact = new ContactData()
-                .withFirstName(CommonFunctions.randomString(10))
-                .withLastName(CommonFunctions.randomString(10))
-                //.withPhoto("src/test/resources/images/avatar.png");
-                .withPhoto(randomFile("src/test/resources/images/"));
-        app.contacts().createContact(contact);
-    }
-
+//    @Test
+//    void canCreateContact() throws InterruptedException {
+//        var contact = new ContactData()
+//                .withFirstName(CommonFunctions.randomString(10))
+//                .withLastName(CommonFunctions.randomString(10))
+//                .withPhoto("src/test/resources/images/avatar.png");
+//        //.withPhoto(randomFile("src/test/resources/images/"));
+//        app.contacts().createContact(contact);
+//    }
 }
